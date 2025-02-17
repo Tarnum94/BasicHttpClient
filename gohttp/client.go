@@ -5,6 +5,7 @@ import (
 )
 
 type httpClient struct {
+	defaultHeaders http.Header
 }
 
 func New() HttpClient {
@@ -13,11 +14,17 @@ func New() HttpClient {
 }
 
 type HttpClient interface {
+	SetHeaders(headers http.Header)
+
 	Get(string, http.Header) (*http.Response, error)
 	Post(string, http.Header, interface{}) (*http.Response, error)
 	Put(string, http.Header, interface{}) (*http.Response, error)
 	Patch(string, http.Header, interface{}) (*http.Response, error)
 	Delete(string, http.Header) (*http.Response, error)
+}
+
+func (c *httpClient) SetHeaders(headers http.Header) {
+	c.defaultHeaders = headers
 }
 
 func (c *httpClient) Get(url string, headers http.Header) (*http.Response, error) {
